@@ -28,15 +28,19 @@ function makeBubble() {
 
 
 function runTimer() {
+    console.log("checking for time");
     var timerInt = setInterval(() => {
         if (timer > 0) {
             timer--;
             document.querySelector("#timerval").textContent = timer
         } else {
             clearInterval(timerInt)
+            if (Number(localStorage.getItem('highestScore')) < score) {
+                localStorage.setItem('highestScore', score);
+            }
             document.querySelector("#pbtm").innerHTML = `
             <div>
-            <div class = "scorediv">${score} in the ${hitCount} Hits</div>
+            <div class = "scorediv">${score} in the ${hitCount} Hits and the highest score for now is ${localStorage.getItem('highestScore')}</div>
             <button class="button" ${onclick = (restartGame)}>Restart</button>
             </div>`
             document.querySelector("#hitVal").textContent = 0
@@ -49,7 +53,6 @@ document.querySelector("#pbtm")
     .addEventListener('click', function (params) {
         var clickedNum = Number(params.target.textContent);
         hitCount++;
-        console.log(hitCount)
         if (clickedNum === hitrn) {
             increaseScore()
             makeBubble()
@@ -64,6 +67,7 @@ function restartGame() {
     getNewHit()
     runTimer()
     makeBubble()
+    document.querySelector("#incScore").textContent = 0
 }
 
 getNewHit()
